@@ -48,6 +48,13 @@
   }
 }
 
+/* Hide default operating system mouse pointer on desktop */
+@media (hover: hover) and (pointer: fine) {
+  *, ::before, ::after {
+    cursor: none !important;
+  }
+}
+
 @layer utilities {
   .font-display {
     font-family: 'Cormorant Garamond', serif;

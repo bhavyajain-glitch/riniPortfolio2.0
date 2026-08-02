@@ -17,15 +17,10 @@ export default function CustomCursor() {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    let x = 0;
-    let y = 0;
-    let targetX = 0;
-    let targetY = 0;
-    let rafId: number;
-
     function handleMouseMove(e: MouseEvent) {
-      targetX = e.clientX;
-      targetY = e.clientY;
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+      }
       setIsVisible(true);
     }
 
@@ -67,22 +62,13 @@ export default function CustomCursor() {
       }
     }
 
-    function animate() {
-      x += (targetX - x) * 0.15;
-      y += (targetY - y) * 0.15;
-      cursor!.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-      rafId = requestAnimationFrame(animate);
-    }
-
-    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseenter', handleMouseEnter);
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseover', handleLinkHover);
     document.addEventListener('mouseout', handleLinkLeave);
-    rafId = requestAnimationFrame(animate);
 
     return () => {
-      cancelAnimationFrame(rafId);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseenter', handleMouseEnter);
       document.removeEventListener('mouseleave', handleMouseLeave);
@@ -103,29 +89,30 @@ export default function CustomCursor() {
       className="fixed top-0 left-0 pointer-events-none z-[9999]"
       style={{
         opacity: isVisible ? 1 : 0,
-        transition: 'opacity 0.3s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease',
-        width: showProjectBubble ? '80px' : isHoveringLink ? '40px' : '8px',
-        height: showProjectBubble ? '80px' : isHoveringLink ? '40px' : '8px',
+        transition: 'opacity 0.2s ease, width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, border 0.25s ease',
+        width: showProjectBubble ? '80px' : isHoveringLink ? '42px' : '9px',
+        height: showProjectBubble ? '80px' : isHoveringLink ? '42px' : '9px',
         borderRadius: '50%',
         background: showProjectBubble
-          ? 'rgba(250, 249, 247, 0.15)'
+          ? 'rgba(250, 249, 247, 0.18)'
           : isHoveringLink
           ? 'transparent'
           : '#1A1A1A',
         border: showProjectBubble
-          ? '1px solid rgba(250, 249, 247, 0.3)'
+          ? '1px solid rgba(250, 249, 247, 0.35)'
           : isHoveringLink
-          ? '1px solid #1A1A1A'
+          ? '1.5px solid #1A1A1A'
           : 'none',
         backdropFilter: showProjectBubble ? 'blur(4px)' : 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        willChange: 'transform',
       }}
     >
       {showProjectBubble && (
         <span
-          className="font-body text-[11px] uppercase tracking-wider text-white"
+          className="font-body text-[11px] uppercase tracking-wider text-white select-none"
           style={{ fontWeight: 400 }}
         >
           View
