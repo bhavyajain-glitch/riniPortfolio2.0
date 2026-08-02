@@ -9,7 +9,10 @@ gsap.registerPlugin(ScrollTrigger);
 export default function ProjectDetail() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const project = projects.find((p) => p.id === id);
+  
+  // Flexible case-insensitive project lookup with fallback
+  const normalizedId = id ? id.toLowerCase().trim() : '';
+  const project = projects.find((p) => p.id.toLowerCase() === normalizedId) || projects[0];
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -18,12 +21,12 @@ export default function ProjectDetail() {
   }, [id]);
 
   useEffect(() => {
-    if (!contentRef.current) return;
+    if (!contentRef.current || !project) return;
 
     const ctx = gsap.context(() => {
       // Animate content blocks
       const blocks = contentRef.current?.querySelectorAll('.content-block');
-      if (blocks) {
+      if (blocks && blocks.length > 0) {
         blocks.forEach((block) => {
           gsap.fromTo(
             block,
@@ -45,7 +48,7 @@ export default function ProjectDetail() {
 
       // Animate images
       const images = contentRef.current?.querySelectorAll('.content-image');
-      if (images) {
+      if (images && images.length > 0) {
         images.forEach((img) => {
           gsap.fromTo(
             img,
@@ -68,20 +71,7 @@ export default function ProjectDetail() {
     }, contentRef);
 
     return () => ctx.revert();
-  }, [id]);
-
-  if (!project) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-warm-white">
-        <div className="text-center">
-          <h1 className="font-display text-4xl text-black">Project not found</h1>
-          <Link to="/" className="font-body text-medium-gray mt-4 inline-block underline">
-            Return to home
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  }, [id, project]);
 
   // Find next project
   const currentIndex = projects.findIndex((p) => p.id === id);

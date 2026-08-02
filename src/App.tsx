@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { useCallback, useEffect } from 'react';
 import useSmoothScroll from '@/hooks/useSmoothScroll';
 import Navigation from '@/components/Navigation';
@@ -33,6 +33,8 @@ export default function App() {
         <Route path="/residential" element={<ResidentialPage />} />
         <Route path="/training" element={<TrainingPage />} />
         <Route path="/project/:id" element={<ProjectDetail />} />
+        {/* Fallback route */}
+        <Route path="*" element={<Home onNavigate={handleNavigate} />} />
       </Routes>
     </>
   );
