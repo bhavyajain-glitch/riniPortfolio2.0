@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 
 interface TrainingGridItem {

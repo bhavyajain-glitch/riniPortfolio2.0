@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { projects } from '@/data/projects';
@@ -7,6 +7,7 @@ import { projects } from '@/data/projects';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ProjectDetail() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const project = projects.find((p) => p.id === id);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -94,6 +95,14 @@ export default function ProjectDetail() {
     { key: 'reflection', label: 'Reflection' },
   ];
 
+  const handleBack = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   const scrollToSection = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) {
@@ -124,25 +133,22 @@ export default function ProjectDetail() {
         />
 
         {/* Back Button */}
-        <Link
-          to="/"
-          className="absolute top-8 left-8 z-10 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-warm-white/10"
-          style={{
-            width: '48px',
-            height: '48px',
-            border: '1px solid rgba(250, 249, 247, 0.5)',
-          }}
+        <button
+          onClick={handleBack}
+          aria-label="Go Back"
+          className="absolute top-8 left-8 md:top-10 md:left-12 z-30 flex items-center gap-2.5 px-4.5 py-2.5 rounded-full bg-black/70 hover:bg-black text-white backdrop-blur-md border border-white/30 shadow-xl transition-all duration-300 group cursor-pointer"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:-translate-x-1">
             <path
               d="M13 8H3M3 8L7 4M3 8L7 12"
-              stroke="rgba(250, 249, 247, 0.8)"
-              strokeWidth="1"
+              stroke="currentColor"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
-        </Link>
+          <span className="font-body text-xs uppercase tracking-widest font-medium text-white">Back</span>
+        </button>
 
         {/* Project Info */}
         <div className="absolute bottom-0 left-0 p-12" style={{ paddingLeft: '80px', paddingBottom: '60px' }}>
