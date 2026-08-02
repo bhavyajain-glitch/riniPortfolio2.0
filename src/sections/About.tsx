@@ -11,7 +11,9 @@ const stats = [
 ];
 
 const skills = [
-  'AutoCAD', 'SketchUp', 'Revit', 'Rhino 3D', 'Photoshop', 'V-Ray', 'Twinmotion', 'Grasshopper',
+  'Autodesk AutoCAD', 'SketchUp', 'Adobe Photoshop', 'Adobe InDesign',
+  'Adobe Illustrator', 'Rhino 3D', 'Grasshopper', 'Twinmotion',
+  'D5 Render', 'V-Ray', 'Revit', 'MS Office', 'GIS',
 ];
 
 export default function About() {
