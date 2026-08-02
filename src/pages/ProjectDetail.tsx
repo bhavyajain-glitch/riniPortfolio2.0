@@ -122,13 +122,17 @@ export default function ProjectDetail() {
           }}
         />
 
-        {/* Back Button */}
+        {/* Previous Circular Back Button */}
         <button
           onClick={handleBack}
           aria-label="Go Back"
-          className="absolute top-8 left-8 md:top-10 md:left-12 z-30 flex items-center gap-2.5 px-4.5 py-2.5 rounded-full bg-black/70 hover:bg-black text-white backdrop-blur-md border border-white/30 shadow-xl transition-all duration-300 group cursor-pointer"
+          className="absolute top-24 left-8 md:top-28 md:left-12 z-30 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/80 text-white backdrop-blur-md border border-white/40 shadow-lg transition-all duration-300 group cursor-pointer"
+          style={{
+            width: '48px',
+            height: '48px',
+          }}
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:-translate-x-1">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:-translate-x-1">
             <path
               d="M13 8H3M3 8L7 4M3 8L7 12"
               stroke="currentColor"
@@ -137,7 +141,6 @@ export default function ProjectDetail() {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="font-body text-xs uppercase tracking-widest font-medium text-white">Back</span>
         </button>
 
         {/* Project Info */}

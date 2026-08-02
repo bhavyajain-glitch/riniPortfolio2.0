@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isHoveringLink, setIsHoveringLink] = useState(false);
   const [isHoveringProject, setIsHoveringProject] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
+
+  const isProjectPage = location.pathname.startsWith('/project/');
 
   useEffect(() => {
     const isTouchDevice = window.matchMedia('(hover: none)').matches;
@@ -35,6 +39,18 @@ export default function CustomCursor() {
 
     function handleLinkHover(e: MouseEvent) {
       const target = e.target as HTMLElement;
+
+      // On project description pages, do NOT show the VIEW bubble cursor
+      if (window.location.pathname.startsWith('/project/')) {
+        setIsHoveringProject(false);
+        if (target.closest('a, button, [role="button"]')) {
+          setIsHoveringLink(true);
+        } else {
+          setIsHoveringLink(false);
+        }
+        return;
+      }
+
       if (target.closest('a, button, [role="button"]')) {
         setIsHoveringLink(true);
       } else if (target.closest('[data-project-item]')) {
@@ -73,11 +89,13 @@ export default function CustomCursor() {
       document.removeEventListener('mouseover', handleLinkHover);
       document.removeEventListener('mouseout', handleLinkLeave);
     };
-  }, []);
+  }, [location.pathname]);
 
   if (typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches) {
     return null;
   }
+
+  const showProjectBubble = isHoveringProject && !isProjectPage;
 
   return (
     <div
@@ -86,26 +104,26 @@ export default function CustomCursor() {
       style={{
         opacity: isVisible ? 1 : 0,
         transition: 'opacity 0.3s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease',
-        width: isHoveringProject ? '80px' : isHoveringLink ? '40px' : '8px',
-        height: isHoveringProject ? '80px' : isHoveringLink ? '40px' : '8px',
+        width: showProjectBubble ? '80px' : isHoveringLink ? '40px' : '8px',
+        height: showProjectBubble ? '80px' : isHoveringLink ? '40px' : '8px',
         borderRadius: '50%',
-        background: isHoveringProject
+        background: showProjectBubble
           ? 'rgba(250, 249, 247, 0.15)'
           : isHoveringLink
           ? 'transparent'
           : '#1A1A1A',
-        border: isHoveringProject
+        border: showProjectBubble
           ? '1px solid rgba(250, 249, 247, 0.3)'
           : isHoveringLink
           ? '1px solid #1A1A1A'
           : 'none',
-        backdropFilter: isHoveringProject ? 'blur(4px)' : 'none',
+        backdropFilter: showProjectBubble ? 'blur(4px)' : 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      {isHoveringProject && (
+      {showProjectBubble && (
         <span
           className="font-body text-[11px] uppercase tracking-wider text-white"
           style={{ fontWeight: 400 }}
