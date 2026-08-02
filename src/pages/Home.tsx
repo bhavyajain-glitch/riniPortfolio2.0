@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import Hero from '@/sections/Hero';
 import HorizontalGallery from '@/sections/HorizontalGallery';
 import About from '@/sections/About';
